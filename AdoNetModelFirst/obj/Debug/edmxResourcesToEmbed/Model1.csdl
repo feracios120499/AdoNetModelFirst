@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Model1" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="Model1Container2" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="UsersSet" EntityType="Model1.Users" />
+    <EntitySet Name="BooksSet" EntityType="Model1.Books" />
+    <EntitySet Name="AuthorsSet" EntityType="Model1.Authors" />
+    <EntitySet Name="LogBooksSet" EntityType="Model1.LogBooks" />
+    <AssociationSet Name="AuthorsBooks" Association="Model1.AuthorsBooks">
+      <End Role="Authors" EntitySet="AuthorsSet" />
+      <End Role="Books" EntitySet="BooksSet" />
+    </AssociationSet>
+    <AssociationSet Name="UsersLogBooks" Association="Model1.UsersLogBooks">
+      <End Role="Users" EntitySet="UsersSet" />
+      <End Role="LogBooks" EntitySet="LogBooksSet" />
+    </AssociationSet>
+    <AssociationSet Name="BooksLogBooks" Association="Model1.BooksLogBooks">
+      <End Role="Books" EntitySet="BooksSet" />
+      <End Role="LogBooks" EntitySet="LogBooksSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="LogBooks" Relationship="Model1.UsersLogBooks" FromRole="Users" ToRole="LogBooks" />
+  </EntityType>
+  <EntityType Name="Books">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="Authors" Relationship="Model1.AuthorsBooks" FromRole="Books" ToRole="Authors" />
+    <NavigationProperty Name="LogBooks" Relationship="Model1.BooksLogBooks" FromRole="Books" ToRole="LogBooks" />
+  </EntityType>
+  <EntityType Name="Authors">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="Books" Relationship="Model1.AuthorsBooks" FromRole="Authors" ToRole="Books" />
+  </EntityType>
+  <EntityType Name="LogBooks">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IsDebtor" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Users" Relationship="Model1.UsersLogBooks" FromRole="LogBooks" ToRole="Users" />
+    <Property Name="UsersId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Books" Relationship="Model1.BooksLogBooks" FromRole="LogBooks" ToRole="Books" />
+    <Property Name="BooksId" Type="Int32" Nullable="false" />
+  </EntityType>
+  <Association Name="AuthorsBooks">
+    <End Type="Model1.Authors" Role="Authors" Multiplicity="*" />
+    <End Type="Model1.Books" Role="Books" Multiplicity="*" />
+  </Association>
+  <Association Name="UsersLogBooks">
+    <End Type="Model1.Users" Role="Users" Multiplicity="1" />
+    <End Type="Model1.LogBooks" Role="LogBooks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LogBooks">
+        <PropertyRef Name="UsersId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="BooksLogBooks">
+    <End Type="Model1.Books" Role="Books" Multiplicity="1" />
+    <End Type="Model1.LogBooks" Role="LogBooks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Books">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LogBooks">
+        <PropertyRef Name="BooksId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model1.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="Model1StoreContainer">
+    <EntitySet Name="UsersSet" EntityType="Model1.Store.UsersSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="BooksSet" EntityType="Model1.Store.BooksSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AuthorsSet" EntityType="Model1.Store.AuthorsSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="LogBooksSet" EntityType="Model1.Store.LogBooksSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AuthorsBooks" EntityType="Model1.Store.AuthorsBooks" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_AuthorsBooks_Authors" Association="Model1.Store.FK_AuthorsBooks_Authors">
+      <End Role="Authors" EntitySet="AuthorsSet" />
+      <End Role="AuthorsBooks" EntitySet="AuthorsBooks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AuthorsBooks_Books" Association="Model1.Store.FK_AuthorsBooks_Books">
+      <End Role="Books" EntitySet="BooksSet" />
+      <End Role="AuthorsBooks" EntitySet="AuthorsBooks" />
+    </AssociationSet>
+    <AssociationSet Name="UsersLogBooks" Association="Model1.Store.UsersLogBooks">
+      <End Role="Users" EntitySet="UsersSet" />
+      <End Role="LogBooks" EntitySet="LogBooksSet" />
+    </AssociationSet>
+    <AssociationSet Name="BooksLogBooks" Association="Model1.Store.BooksLogBooks">
+      <End Role="Books" EntitySet="BooksSet" />
+      <End Role="LogBooks" EntitySet="LogBooksSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="UsersSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BooksSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AuthorsSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LogBooksSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsDebtor" Type="bit" Nullable="false" />
+    <Property Name="UsersId" Type="int" Nullable="false" />
+    <Property Name="BooksId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AuthorsBooks">
+    <Key>
+      <PropertyRef Name="Authors_Id" />
+      <PropertyRef Name="Books_Id" />
+    </Key>
+    <Property Name="Authors_Id" Type="int" Nullable="false" />
+    <Property Name="Books_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="UsersLogBooks">
+    <End Role="Users" Type="Model1.Store.UsersSet" Multiplicity="1" />
+    <End Role="LogBooks" Type="Model1.Store.LogBooksSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LogBooks">
+        <PropertyRef Name="UsersId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="BooksLogBooks">
+    <End Role="Books" Type="Model1.Store.BooksSet" Multiplicity="1" />
+    <End Role="LogBooks" Type="Model1.Store.LogBooksSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Books">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LogBooks">
+        <PropertyRef Name="BooksId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AuthorsBooks_Authors">
+    <End Role="Authors" Type="Model1.Store.AuthorsSet" Multiplicity="1" />
+    <End Role="AuthorsBooks" Type="Model1.Store.AuthorsBooks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Authors">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AuthorsBooks">
+        <PropertyRef Name="Authors_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AuthorsBooks_Books">
+    <End Role="AuthorsBooks" Type="Model1.Store.AuthorsBooks" Multiplicity="*" />
+    <End Role="Books" Type="Model1.Store.BooksSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Books">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AuthorsBooks">
+        <PropertyRef Name="Books_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
